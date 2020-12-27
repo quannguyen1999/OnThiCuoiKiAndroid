@@ -6,12 +6,12 @@ Mssv: 17008971 **
 
 ## Main <br/>
 ------------
-![](app/src/main/res/drawable/main.PNG)
+![](app/src/main/res/drawable-v24/main.PNG)
 
 ## Menu <br/>
 ------------
-![](app/src/main/res/drawable/menu.PNG)
+![](app/src/main/res/drawable-v24/menu.PNG)
 
 ## Form <br/>
 ------------
-![](app/src/main/res/drawable/form.PNG)
+![](app/src/main/res/drawable-v24/form.PNG)
