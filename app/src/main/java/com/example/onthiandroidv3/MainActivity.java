@@ -17,7 +17,9 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.onthiandroidv3.daos.StudentDao;
 import com.example.onthiandroidv3.model.Student;
+import com.example.onthiandroidv3.room.RoomDB;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -48,7 +50,12 @@ public class MainActivity extends AppCompatActivity {
     private static final int EDIT = 888;
 
     //db
-    DBManager dbManager;
+    //DBManager dbManager;
+
+    //db-room
+    private static RoomDB roomDB;
+
+    private static StudentDao dbManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +68,12 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
         //connect db
-        dbManager = new DBManager(this);
+        //dbManager = new DBManager(this);
+
+        //room db
+        roomDB = RoomDB.getInstance(this);
+        dbManager = roomDB.studentDao();
+
 
         metaData();
 
@@ -170,7 +182,11 @@ public class MainActivity extends AppCompatActivity {
                 Student studentEdit = listStudent.get(pos);
                 studentEdit.setTen(student.getTen());
                 studentEdit.setLop(student.getLop());
-                dbManager.updateStudent(studentEdit);
+                //no-room
+                //dbManager.updateStudent(studentEdit);
+
+                //room db
+                dbManager.updateStudent(student.getTen(),student.getMssv());
                 resetList();
             }
         }
