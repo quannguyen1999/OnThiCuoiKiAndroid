@@ -4,18 +4,23 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.example.onthiandroidv3.daos.StudentDao;
 import com.example.onthiandroidv3.model.Student;
@@ -44,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
 
     private Button btnReset;
 
+    //bonus
+    private Button btnAddPopUp;
+
     //request code
     private static final int ADD = 999;
 
@@ -56,6 +64,17 @@ public class MainActivity extends AppCompatActivity {
     private static RoomDB roomDB;
 
     private static StudentDao dbManager;
+
+    //bonus
+    private EditText edtMssv, edtTen;
+
+    private Spinner spLop;
+
+    private Button btnSave;
+
+    static String[] listLopSpinner = new String[]{
+            "DHKTPM13ATT", "DHKTPM13BTT", "DHKTPM13CTT"
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
         btnTim = findViewById(R.id.btnTim);
         rclView = findViewById(R.id.rclView);
         btnReset = findViewById(R.id.btnReset);
+        btnAddPopUp = findViewById(R.id.btnAddPopUp);
     }
 
     private void initData() {
@@ -162,6 +182,56 @@ public class MainActivity extends AppCompatActivity {
                 resetList();
             }
         });
+
+        btnAddPopUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(v.getContext());
+                LayoutInflater inflater = getLayoutInflater();
+                View dialogView = inflater.inflate(R.layout.activity_form, null);
+                builder.setView(dialogView);
+
+                spLop = dialogView.findViewById(R.id.spLop);
+                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(v.getContext(),
+                        R.array.type_array, R.layout.support_simple_spinner_dropdown_item);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spLop.setAdapter(adapter);
+
+                edtMssv = dialogView.findViewById(R.id.edtMSSV);
+
+                edtTen = dialogView.findViewById(R.id.edtHoTen);
+
+                spLop = dialogView.findViewById(R.id.spLop);
+
+                builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        String mssv = edtMssv.getText().toString();
+
+                        String ten = edtTen.getText().toString();
+
+//                        System.out.println(edtMssv.getText().toString());
+
+                        checkInFormation(mssv, ten);
+
+                        Student student = new Student(Integer.parseInt(mssv), ten, spLop.getSelectedItem().toString());
+
+                        dbManager.addStudent(student);
+
+                        resetList();
+
+                        dialog.dismiss();
+                    }
+                })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                builder.show();
+            }
+        });
     }
 
     @Override
@@ -218,5 +288,36 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         return super.onContextItemSelected(item);
+    }
+
+    //bonus
+    public void checkInFormation(String mssv, String ten) {
+        if (mssv.equals("")) {
+
+            showDialog("Please enter MSSV");
+
+            edtMssv.requestFocus();
+
+            return;
+
+        }
+
+        //check MSSV
+        try {
+            Integer.parseInt(edtMssv.getText().toString());
+        } catch (Exception e) {
+            showDialog("MSSV invalid");
+            edtMssv.requestFocus();
+            return;
+        }
+
+        if (ten.equals("")) {
+
+            showDialog("Please enter Ten");
+
+            edtTen.requestFocus();
+
+            return;
+        }
     }
 }

@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">onThiAndroidV3</string>
+    <string-array name="type_array">
+        <item>DHKTPM13ATT</item>
+        <item>DHKTPM13BTT</item>
+        <item>DHKTPM13CTT</item>
+    </string-array>
 </resources>

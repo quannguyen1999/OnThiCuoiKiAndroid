@@ -27,4 +27,18 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:hint="Lớp" />
+
+    <Button
+        android:id="@+id/btnDeleteInRC"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="DL" />
+
+    <Button
+        android:id="@+id/btnDetailInRC"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="DT" />
 </LinearLayout>

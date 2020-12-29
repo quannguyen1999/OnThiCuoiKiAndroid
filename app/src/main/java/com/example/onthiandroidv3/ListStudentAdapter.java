@@ -1,6 +1,8 @@
 package com.example.onthiandroidv3;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -9,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -16,11 +19,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.onthiandroidv3.model.Student;
+import com.example.onthiandroidv3.room.RoomDB;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class ListStudentAdapter extends RecyclerView.Adapter<ListStudentAdapter.StudentViewHolder>{ // implements View.OnCreateContextMenuListener {
+
+    //bonus
+    private RoomDB roomDB;
 
     private LayoutInflater layoutInflater;
 
@@ -46,6 +54,37 @@ public class ListStudentAdapter extends RecyclerView.Adapter<ListStudentAdapter.
         holder.tvMssv.setText(String.valueOf(mCurrent.getMssv()));
         holder.tvLop.setText(mCurrent.getLop());
         holder.tvTen.setText(mCurrent.getTen());
+
+        //bonus
+        holder.btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                roomDB = RoomDB.getInstance(view.getContext());
+                roomDB.studentDao().deleteStudent(listStudent.get(position));
+                List<Student> listStudentInDB = roomDB.studentDao().getAllStudent();
+                listStudent.clear();
+                for (Student student : listStudentInDB) {
+                    listStudent.add(student);
+                }
+                notifyDataSetChanged();
+            }
+        });
+
+        holder.btnDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int pos = position;
+                Student student = listStudent.get(pos);
+                Intent intent1 = new Intent(view.getContext(), FormActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("student", student);
+                bundle.putInt("pos", pos);
+                intent1.putExtra("edit", bundle);
+                view.getContext().startActivity(intent1);
+//                startActivityForResult(intent1, EDIT);
+//                listStudentAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
 
@@ -63,14 +102,26 @@ public class ListStudentAdapter extends RecyclerView.Adapter<ListStudentAdapter.
 
         LinearLayout linearLayout;
 
+        //bonus
+        Button btnDelete;
+        //bonus
+        Button btnDetail;
+
         public StudentViewHolder(@NonNull View itemView, ListStudentAdapter listStudentAdapter) {
+
             super(itemView);
 
             linearLayout = itemView.findViewById(R.id.linear);
 
             tvMssv = itemView.findViewById(R.id.tvMssv);
+
             tvTen = itemView.findViewById(R.id.tvHoTen);
+
             tvLop = itemView.findViewById(R.id.tvLop);
+
+            btnDelete = itemView.findViewById(R.id.btnDeleteInRC);
+
+            btnDetail = itemView.findViewById(R.id.btnDetailInRC);
 
             this.listStudentAdapter = listStudentAdapter;
 
