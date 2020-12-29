@@ -19,7 +19,9 @@ import com.example.onthiandroidv3.model.Student;
 
 import java.util.ArrayList;
 
+
 public class ListStudentAdapter extends RecyclerView.Adapter<ListStudentAdapter.StudentViewHolder>{ // implements View.OnCreateContextMenuListener {
+
     private LayoutInflater layoutInflater;
 
     private ArrayList<Student> listStudent;
@@ -52,6 +54,8 @@ public class ListStudentAdapter extends RecyclerView.Adapter<ListStudentAdapter.
         return listStudent.size();
     }
 
+    //implements
+    //View.OnCreateContextMenuListener
     public class StudentViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
         TextView tvMssv, tvTen, tvLop;
 
