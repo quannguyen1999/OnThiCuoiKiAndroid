@@ -83,6 +83,7 @@ public class DBManager extends SQLiteOpenHelper{
 
     public int updateStudent(Student student){
         SQLiteDatabase db = this.getWritableDatabase();
+
         ContentValues values = new ContentValues();
 
         values.put(TEN,student.getTen());
@@ -97,5 +98,20 @@ public class DBManager extends SQLiteOpenHelper{
         db.delete(TABLE_NAME, MSSV + " = ?",
                 new String[] { String.valueOf(student.getMssv()) });
         db.close();
+    }
+
+    public Student getSVByMSSV(String id){
+        Student student = null;
+        SQLiteDatabase db= this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + MSSV + " = '"+id+"'";
+        Cursor cursor = db.rawQuery(query,null);
+        if(!cursor.moveToFirst() || cursor.getCount() == 0){
+            return null;
+        }else{
+            cursor.moveToFirst();
+            student = new Student(cursor.getInt(0),cursor.getString(1),cursor.getString(2));
+        }
+        db.close();
+        return student;
     }
 }
