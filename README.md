@@ -3,6 +3,8 @@
 Họ tên : Nguyễn Đặng Anh Quân
 Mssv: 17008971 **
 
+## Chú thích  <br/>
+Android có thể cấu hình chạy sqlite thường hoặc kiểu room
 
 ## Main <br/>
 ------------
